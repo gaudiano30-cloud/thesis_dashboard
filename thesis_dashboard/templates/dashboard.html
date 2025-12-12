@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="card">
+  <form class="form inline" method="get" action="{{ url_for('dashboard') }}">
+    <div>
+      <label>Ticker</label>
+      <select name="ticker">
+        {% for t in tickers %}
+          <option value="{{ t }}" {% if t == ticker %}selected{% endif %}>{{ t }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div>
+      <label>Expiry</label>
+      <select name="expiry">
+        {% for e in expiries %}
+          <option value="{{ e }}" {% if e == expiry %}selected{% endif %}>{{ e }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div>
+      <label>Data</label>
+      <select name="data">
+        {% for d in dates %}
+          <option value="{{ d }}" {% if d == data %}selected{% endif %}>{{ d }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="btnwrap">
+      <button type="submit">Aggiorna</button>
+    </div>
+  </form>
+</div>
+
+<div class="grid">
+  <div class="card">
+    <h2>IV Smile</h2>
+    <div id="fig_smile"></div>
+  </div>
+
+  <div class="card">
+    <h2>Crash probabilities</h2>
+    <div id="fig_crash"></div>
+  </div>
+
+  <div class="card span2">
+    <h2>IV Surface</h2>
+    <div id="fig_surf"></div>
+  </div>
+
+  <div class="card">
+    <h2>Mode RND vs MND</h2>
+    <div id="fig_mode"></div>
+  </div>
+
+  <div class="card">
+    <h2>Option pricing</h2>
+    <div id="fig_opt"></div>
+  </div>
+</div>
+
+<script>
+  const fig_smile = {{ fig_smile|safe }};
+  const fig_surf  = {{ fig_surf|safe }};
+  const fig_opt   = {{ fig_opt|safe }};
+  const fig_crash = {{ fig_crash|safe }};
+  const fig_mode  = {{ fig_mode|safe }};
+
+  Plotly.newPlot("fig_smile", fig_smile.data, fig_smile.layout, {responsive:true});
+  Plotly.newPlot("fig_surf",  fig_surf.data,  fig_surf.layout,  {responsive:true});
+  Plotly.newPlot("fig_opt",   fig_opt.data,   fig_opt.layout,   {responsive:true});
+  Plotly.newPlot("fig_crash", fig_crash.data, fig_crash.layout, {responsive:true});
+  Plotly.newPlot("fig_mode",  fig_mode.data,  fig_mode.layout,  {responsive:true});
+</script>
+
+{% endblock %}
